@@ -1,0 +1,32 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Whisper / ML
+whisper_cache/
+*.pt
+*.bin
+
+# Logs & temp
+logs/
+*.log
+*.tmp
+tmp/
+
+# OS
+.DS_Store
+Thumbs.db

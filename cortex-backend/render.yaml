@@ -1,0 +1,47 @@
+# ── Cortex Backend — Render deployment config ─────────────────────────────────
+# Place this file in your cortex-backend repo root.
+# Render will auto-detect it and configure the service.
+#
+# Deploy steps:
+#   1. Push cortex-backend/ to its own GitHub repo
+#   2. Create a new "Web Service" on render.com
+#   3. Connect the repo — Render reads this file automatically
+#   4. Add environment variables in the Render dashboard (see below)
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  - type: web
+    name: cortex-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter          # upgrade to "standard" for production load
+
+    # Health check — Render will mark the service unhealthy if this fails
+    healthCheckPath: /health
+
+    # Environment variables — set these in the Render dashboard, NOT here
+    # (never commit secrets to source control)
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false        # set manually in dashboard
+
+      - key: EXPECTED_EMAIL
+        sync: false        # the agent email credential
+
+      - key: MY_SECRET
+        sync: false        # the agent secret credential
+
+      - key: AIPIPE_API_KEY
+        sync: false        # optional — leave blank if using Groq directly
+
+      - key: CORS_ORIGINS
+        # Replace with your actual Vercel URL after first deploy.
+        # Multiple origins comma-separated:
+        # https://cortex-xyz.vercel.app,https://yourdomain.com
+        sync: false
+
+      - key: CORTEX_DEBUG
+        value: "false"
+
+      - key: PORT
+        value: "8000"

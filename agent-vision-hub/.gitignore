@@ -1,0 +1,27 @@
+# Environment — never commit real secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+
+# Cache
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

@@ -1,0 +1,47 @@
+# ── Cortex — Docker Compose (local full-stack only) ───────────────────────────
+# For cloud deployment see DEPLOY.md:
+#   Frontend → Vercel
+#   Backend  → Render
+#
+# Usage:
+#   cp cortex-backend/.env.example  cortex-backend/.env   # fill in keys
+#   docker compose up --build
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  backend:
+    build:
+      context: ./cortex-backend
+      args:
+        # Skip Playwright browser download locally to speed up builds.
+        # Set to 0 if you need full URL scraping locally.
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./cortex-backend/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./agent-vision-hub
+      args:
+        # Empty string → browser uses relative /api paths proxied by nginx.
+        # For Vercel deployment, set to your Render backend URL instead.
+        VITE_API_BASE_URL: ""
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-}
+        VITE_GROQ_API_KEY:     ${VITE_GROQ_API_KEY:-}
+        VITE_AGENT_EMAIL:      ${VITE_AGENT_EMAIL:-}
+        VITE_AGENT_SECRET:     ${VITE_AGENT_SECRET:-}
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

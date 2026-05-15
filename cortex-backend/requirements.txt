@@ -1,0 +1,23 @@
+# ── Core ─────────────────────────────────────────────────────────────────────
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+python-dotenv==1.0.1
+httpx==0.28.1
+
+# ── Web scraping (optional — falls back to httpx if not installed) ────────────
+playwright==1.49.1
+
+# ── Audio transcription (optional) ───────────────────────────────────────────
+# Install ONLY if you need audio tasks:
+#   pip install setuptools wheel
+#   pip install openai-whisper
+# NOTE: openai-whisper requires torch. Install torch first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+#   pip install openai-whisper
+
+# ── Data processing ───────────────────────────────────────────────────────────
+pandas==2.2.3
+numpy==2.2.0
+Pillow==12.1.1
+beautifulsoup4==4.12.3
