@@ -485,7 +485,7 @@ Only return valid JSON."""
                         f.write(r.content)
                     register_temp(audio_tmp)
                     log.info("Audio saved (%d bytes) → %s", len(r.content), audio_tmp)
-                    audio_text = transcribe_audio(audio_tmp)
+                    audio_text = await asyncio.to_thread(transcribe_audio, audio_tmp)
                     if audio_text:
                         log.info("Transcription: %s…", audio_text[:80])
                     else:

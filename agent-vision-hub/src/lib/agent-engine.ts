@@ -176,7 +176,7 @@ export async function runWithBackend(
     { id: "b-crit", title: "Critic — Submit & Verify",       description: "Posts the computed answer, checks correctness, retries with corrections.", status: "pending", retryCount: 0 },
   ];
   onStepsReady([...steps]);
-  await tick(300);
+  await tick(50);
   if (abort.current) return;
 
   // ── Planner phase (visual only — backend handles real work) ───────────────
@@ -195,7 +195,7 @@ export async function runWithBackend(
   ];
   for (const line of plannerLogLines) {
     if (abort.current) return;
-    await tick(280 + Math.random() * 180);
+    await tick(80 + Math.random() * 50);
     steps[0] = { ...steps[0], output: { type: "logs", summary: "Task analyzed — operation type and resources identified", content: [...(steps[0].output?.content ?? []), line] } };
     onStepUpdate(0, steps[0]);
   }
@@ -247,7 +247,7 @@ export async function runWithBackend(
 
   for (const line of execLogLines) {
     if (abort.current) return;
-    await tick(500 + Math.random() * 400);
+    await tick(100 + Math.random() * 80);
     steps[1] = { ...steps[1], output: { type: "logs", summary: "Downloading files, running generated Python code", content: [...(steps[1].output?.content ?? []), line] } };
     onStepUpdate(1, steps[1]);
   }
@@ -268,7 +268,7 @@ export async function runWithBackend(
   const execOutput = mapBackendToOutput(backendResult);
   steps[1] = { ...steps[1], status: "success", durationMs: Date.now() - execStart, output: execOutput };
   onStepUpdate(1, steps[1]);
-  await tick(250);
+  await tick(50);
 
   // ── Critic phase ──────────────────────────────────────────────────────────
   const criticStart = Date.now();
@@ -288,7 +288,7 @@ export async function runWithBackend(
   ];
   for (const line of criticLogs) {
     if (abort.current) return;
-    await tick(250 + Math.random() * 150);
+    await tick(80 + Math.random() * 50);
     steps[2] = { ...steps[2], output: { type: "logs", summary: "Verifying answer and synthesizing report", content: [...(steps[2].output?.content ?? []), line] } };
     onStepUpdate(2, steps[2]);
   }
@@ -305,7 +305,7 @@ export async function runWithBackend(
   };
   onStepUpdate(2, steps[2]);
 
-  await tick(400);
+  await tick(50);
   onSynthesis(buildSynthesis(prompt, backendResult, steps));
 }
 
