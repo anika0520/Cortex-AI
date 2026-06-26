@@ -1,215 +1,191 @@
-# 🧠 Cortex — Autonomous AI Agent Platform
+# 🧠 Cortex: Autonomous AI Agent Platform
 
-**A beautiful full-stack platform for building autonomous AI agents.**
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-19-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
+![Python](https://img.shields.io/badge/Python-3.11+-yellow.svg)
 
-Cortex can understand natural language tasks, plan steps, browse the web, download files, transcribe audio, generate and execute Python code, and submit answers — all with full visibility into every step.
+Cortex is an advanced, full-stack platform designed for the development and deployment of autonomous AI agents. Built with a focus on reliability, transparency, and a premium developer experience, Cortex enables agents to seamlessly understand natural language, execute complex multi-step plans, interact with web environments, process diverse file types, and autonomously generate and execute Python code.
 
-It features a **dual-mode architecture**: powerful Python backend for real capabilities, with seamless fallback to in-browser Groq LLM when the backend is unavailable.
-
----
-
-## ✨ Key Features
-
-- **Dual-Mode Execution**: Full backend power or lightweight Groq LLM mode
-- **Web Scraping** with Playwright (JavaScript-rendered pages supported)
-- **File Handling**: Download, process, and analyze CSVs, PDFs, images, etc.
-- **Audio Transcription** powered by Whisper (optional)
-- **Intelligent Code Generation & Execution** with auto-dependency installation
-- **Retry Logic & Challenge Chaining** — handles multi-step problems
-- **Real-time Execution Timeline** with live logs
-- **Persistent Task History** and Dashboard
-- **Beautiful, responsive UI** built with modern React
+The platform employs a robust **dual-mode architecture**: a powerful Python backend for executing resource-intensive operations, with an intelligent and seamless fallback to an in-browser LLM engine when the backend is unreachable.
 
 ---
 
-## 📁 Project Structure
+## 🌟 Core Capabilities
 
-```bash
-cortex-agent-platform/
-├── README.md
-├── docker-compose.yml                 # One-command Docker setup
-│
-├── agent-vision-hub/                  # React Frontend
-│   ├── src/
-│   │   ├── lib/
-│   │   │   ├── agent-engine.ts        # Dual-mode: Backend OR Groq LLM
-│   │   │   ├── storage.ts             # Persistent localStorage layer
-│   │   │   └── mock-data.ts
-│   │   ├── components/
-│   │   │   ├── ExecutionTimeline.tsx
-│   │   │   ├── AppSidebar.tsx
-│   │   │   ├── TaskInput.tsx
-│   │   │   └── TopBar.tsx
-│   │   └── routes/
-│   │       ├── index.tsx              # Main agent runner
-│   │       ├── auth.tsx
-│   │       ├── dashboard.tsx
-│   │       └── files.tsx
-│   ├── Dockerfile
-│   ├── nginx.conf
-│   └── .env.example
-│
-└── cortex-backend/                    # Python Backend
-    ├── main.py                        # Full agent pipeline
-    ├── requirements.txt
-    ├── Dockerfile
-    └── .env.example
+*   **Dual-Mode Execution Engine:** Seamlessly transitions between a high-performance Python backend and a lightweight, in-browser Groq LLM mode.
+*   **Advanced Web Interaction:** Utilizes Playwright for robust web scraping, fully supporting JavaScript-rendered dynamic single-page applications.
+*   **Comprehensive File Processing:** Natively handles the downloading, processing, and analysis of various data formats including CSVs, PDFs, and images.
+*   **Audio Transcription:** Integrates Whisper for high-accuracy audio transcription capabilities (optional module).
+*   **Autonomous Code Execution:** Features intelligent Python code generation coupled with a sandboxed execution environment that automatically handles dependency installation.
+*   **Resilient Problem Solving:** Implements sophisticated retry logic and challenge chaining to successfully navigate multi-step, complex problems.
+*   **Complete Observability:** Provides a real-time execution timeline with live, structured logging, ensuring full visibility into agent decision-making.
+*   **Modern User Interface:** A responsive, beautifully crafted frontend built on React 19, Tailwind CSS, and Framer Motion.
 
+---
+
+## 🏗️ Architecture
+
+Cortex utilizes a resilient fallback mechanism to ensure continuous operation. 
+
+```text
+Application Initialization
+        │
+        ▼
+Credentials Configured? (VITE_AGENT_EMAIL & SECRET)
+        │
+   ┌────┴─────────────────────────────┐
+  YES                                 NO
+   │                                  │
+ Health Check Ping                  Groq LLM Mode
+   │                                (In-Browser execution)
+   ├─ Reachable ──► Backend Mode
+   └─ Unreachable ──► Groq LLM Mode (Auto-fallback)
 ```
 
----
-
-## ⚡ Quick Start
-
-### Option 1 — Docker (Recommended)
-
-```bash
-# 1. Configure backend
-cp cortex-backend/.env.example cortex-backend/.env
-# Edit cortex-backend/.env:
-#   GROQ_API_KEY=gsk_...
-#   EXPECTED_EMAIL=you@example.com
-#   MY_SECRET=your_secret
-
-# 2. Configure frontend (optional — sets backend credentials)
-cp agent-vision-hub/.env.example agent-vision-hub/.env
-# Edit agent-vision-hub/.env:
-#   VITE_GROQ_API_KEY=gsk_...
-#   VITE_AGENT_EMAIL=you@example.com
-#   VITE_AGENT_SECRET=your_secret
-
-# 3. Launch everything
-docker-compose up --build
-
-# Frontend → http://localhost:3000
-# Backend  → http://localhost:8000
-# API Docs → http://localhost:8000/docs
-```
+The UI clearly indicates the active execution mode:
+*   🟢 **Python Backend Connected**: Full capabilities active (Playwright, Code Execution, Whisper).
+*   🔵 **Groq LLM Mode**: Lightweight, browser-based Planner → Executor → Critic loop.
 
 ---
 
-### Option 2 — Local Development
+## 🚀 Getting Started
+
+### Prerequisites
+
+*   [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Recommended)
+*   Node.js 18+ (For local frontend development)
+*   Python 3.11+ (For local backend development)
+
+### Option 1: Docker (Recommended)
+
+The most efficient way to launch the complete Cortex stack.
+
+1.  **Configure Backend Environment:**
+    ```bash
+    cp cortex-backend/.env.example cortex-backend/.env
+    ```
+    *Edit `cortex-backend/.env` with your `GROQ_API_KEY` and authentication credentials.*
+
+2.  **Configure Frontend Environment (Optional):**
+    ```bash
+    cp agent-vision-hub/.env.example agent-vision-hub/.env
+    ```
+    *Edit `agent-vision-hub/.env` to configure backend credentials for the UI.*
+
+3.  **Initialize Services:**
+    ```bash
+    docker-compose up --build
+    ```
+
+*   **Frontend Interface:** `http://localhost:3000`
+*   **Backend API:** `http://localhost:8000`
+*   **API Documentation:** `http://localhost:8000/docs`
+
+---
+
+### Option 2: Local Development Environment
+
+For developers looking to contribute or modify the source code directly.
 
 **Terminal 1 — Backend:**
-
 ```bash
 cd cortex-backend
-python -m venv venv && source venv/bin/activate
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 pip install -r requirements.txt
-playwright install chromium        # For JS-rendered pages
-# macOS/Linux: apt install ffmpeg  # For audio transcription
-cp .env.example .env               # Fill in GROQ_API_KEY, credentials
-python main.py --dev               # Hot-reload dev mode
+playwright install chromium
+
+# Optional: Install ffmpeg for Whisper transcription support (macOS/Linux: apt install ffmpeg)
+
+cp .env.example .env
+python main.py --dev
 ```
 
 **Terminal 2 — Frontend:**
-
-```bash
-cd agent-vision-hub
-npm install
-cp .env.example .env               # Fill in .env
-npm run dev                        # → http://localhost:5173
-```
-
----
-
-### Option 3 — Frontend Only (Groq LLM, no backend)
-
 ```bash
 cd agent-vision-hub
 npm install
 cp .env.example .env
-# Set: VITE_GROQ_API_KEY=gsk_...  (free at console.groq.com)
 npm run dev
 ```
 
 ---
 
-## 🔄 How the Dual-Mode Engine Works
+### Option 3: Lightweight Mode (Frontend Only)
 
+Run Cortex entirely in the browser using the Groq API, without deploying the Python backend.
+
+```bash
+cd agent-vision-hub
+npm install
+cp .env.example .env
+# Ensure VITE_GROQ_API_KEY is populated in your .env
+npm run dev
 ```
-App starts
-    │
-    ▼
-VITE_AGENT_EMAIL + _SECRET set?
-    │
-  ┌─┴──────────────────────────┐
-  YES                          NO
-  │                            │
-  Ping /health                 Groq LLM mode
-  │                            (in-browser)
-  ├─ Reachable → Backend mode
-  └─ Unreachable → Groq LLM mode (auto-fallback)
-```
-
-**UI badge shows:**
-
-- 🟢 "Python backend connected" — full power (scraping, code exec, Whisper)
-- 🔵 "Groq LLM mode" — in-browser Planner → Executor → Critic
 
 ---
 
-🛠 Tech Stack
-Frontend
+## 🛠️ Technology Stack
 
-React 19 + TypeScript
-TanStack Router
-Tailwind CSS + shadcn/ui
-Framer Motion
-Recharts
+**Frontend Interface:**
+*   React 19 & TypeScript
+*   TanStack Router
+*   Tailwind CSS & shadcn/ui
+*   Framer Motion (Animations)
+*   Recharts (Data Visualization)
 
-Backend
+**Backend Infrastructure:**
+*   Python 3.11 & FastAPI
+*   Groq (Primary LLM Engine)
+*   Playwright (Browser Automation)
+*   Whisper (Audio Processing)
+*   Sandboxed Python Subprocesses
 
-Python 3.11 + FastAPI
-Groq (primary LLM)
-Playwright (web scraping)
-Whisper (optional audio transcription)
-Sandboxed code execution with auto pip install
-
-Infrastructure
-
-Docker + Docker Compose
-Nginx (for production frontend)
+**Deployment:**
+*   Docker & Docker Compose
+*   Nginx (Production Frontend Serving)
 
 ---
 
-## 🔑 Environment Variables
+## ⚙️ Configuration
 
 ### Frontend (`agent-vision-hub/.env`)
 
-| Variable            | Required         | Purpose                          |
-| ------------------- | ---------------- | -------------------------------- |
-| `VITE_GROQ_API_KEY` | For LLM mode     | Free at console.groq.com         |
-| `VITE_API_BASE_URL` | For backend mode | Default: `http://localhost:8000` |
-| `VITE_AGENT_EMAIL`  | For backend mode | Must match `EXPECTED_EMAIL`      |
-| `VITE_AGENT_SECRET` | For backend mode | Must match `MY_SECRET`           |
+| Variable | Required | Description |
+| :--- | :--- | :--- |
+| `VITE_GROQ_API_KEY` | For LLM Mode | API key from console.groq.com |
+| `VITE_API_BASE_URL` | For Backend Mode | Backend endpoint (Default: `http://localhost:8000`) |
+| `VITE_AGENT_EMAIL` | For Backend Mode | Must match `EXPECTED_EMAIL` in backend |
+| `VITE_AGENT_SECRET` | For Backend Mode | Must match `MY_SECRET` in backend |
 
 ### Backend (`cortex-backend/.env`)
 
-| Variable         | Required | Purpose                          |
-| ---------------- | -------- | -------------------------------- |
-| `GROQ_API_KEY`   | Yes      | Free Groq key (console.groq.com) |
-| `EXPECTED_EMAIL` | Yes      | Auth credential                  |
-| `MY_SECRET`      | Yes      | Auth credential                  |
-| `CORS_ORIGINS`   | No       | Comma-separated allowed origins  |
-| `CORTEX_DEBUG`   | No       | Enable verbose logging           |
+| Variable | Required | Description |
+| :--- | :--- | :--- |
+| `GROQ_API_KEY` | Yes | API key from console.groq.com |
+| `EXPECTED_EMAIL` | Yes | Authentication credential |
+| `MY_SECRET` | Yes | Authentication credential |
+| `CORS_ORIGINS` | No | Allowed origins (Comma-separated) |
+| `CORTEX_DEBUG` | No | Enable verbose debug logging |
 
 ---
 
-## 🐍 Backend Capabilities
+## 📁 Repository Structure
 
-| Feature                           | Status                                  |
-| --------------------------------- | --------------------------------------- |
-| Web scraping (Playwright)         | ✅ Optional — falls back to httpx       |
-| Audio transcription (Whisper)     | ✅ Optional — skipped if not installed  |
-| Python code generation            | ✅ Groq llama-3.3-70b-versatile         |
-| Sandboxed code execution          | ✅ subprocess with 30s timeout          |
-| Auto pip-install missing packages | ✅                                      |
-| Retry loop (code + submission)    | ✅ 3 code retries, 5 submission retries |
-| Challenge chaining                | ✅ Follows `next_url` from grader       |
-| Structured logging                | ✅ timestamps, levels, truncated output |
-| Safe temp file cleanup            | ✅ `atexit` + per-request cleanup       |
-| CORS security                     | ✅ Configurable allowed origins         |
-| Dev vs production mode            | ✅ `--dev` flag for hot-reload          |
-
-Built with transparency, reliability, and great developer experience in mind.
+```text
+cortex-agent-platform/
+├── agent-vision-hub/                  # React Frontend Application
+│   ├── src/
+│   │   ├── lib/
+│   │   │   ├── agent-engine.ts        # Core Dual-mode routing logic
+│   │   │   └── storage.ts             # Persistence layer
+│   │   ├── components/                # Reusable UI components
+│   │   └── routes/                    # Application views
+│   └── Dockerfile
+├── cortex-backend/                    # Python FastAPI Backend
+│   ├── main.py                        # Core agent execution pipeline
+│   ├── requirements.txt
+│   └── Dockerfile
+└── docker-compose.yml                 # Multi-container orchestration
+```
